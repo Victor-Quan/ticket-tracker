@@ -14,8 +14,16 @@ function fetchIssues() {
         let status = issues[i].status;
         let statusColor = status == 'Closed' ? 'label-success' : 'label-info';
 
-        // issuesList.innerHTML += ''
-
+        issuesList.innerHTML += 
+        '<div class="well">' +
+        '<h6>Issue ID:' + id + '</h6>' +
+        '<p><span class="label ' + statusColor + '">' + status + '</span></p>' +
+        '<h3>' + subject + '</h3>' +
+        '<p>' + description + '</p>' + 
+        '<p><span class="glyphicon glyphicon-time"></span> ' + severity + ' ' + '<span class="glyphicon glyphicon-user"></span> ' + assignedTo + '</p>' + 
+        '<a href="#" class="btn btn-warning" onclick="setStatusClosed(\''+id+'\')">Close</a> ' +
+        '<a href="#" class="btn btn-danger" onclick="deleteIssue(\''+id+'\')">Delete</a>'
+        + '</div>'
     }
 }
 
@@ -40,4 +48,14 @@ function saveIssue(e) {
     document.getElementById('issueInputForm').reset();
     fetchIssues();
     e.preventDefault();
+}
+
+function setStatusClosed(id) {
+    let issues = JSON.parse(localStorage.getItem('issues')).filter(x => x.id == id);
+    console.log(issues);
+    if (issues.length) {
+        issues[0].status = 'Closed';
+    }
+    localStorage.setItem('issues', JSON.stringify(issues));
+    fetchIssues();
 }
